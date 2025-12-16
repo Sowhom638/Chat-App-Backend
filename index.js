@@ -32,8 +32,10 @@ io.on("connection", (socket) => {
         const { sender, receiver, message } = data;
         const newMessage = new Messages({ sender, receiver, message });
         await newMessage.save();
+
+        socket.broadcast.emit("receive_message", data);
     });
-    socket.broadcast.emit("receive_message", data);
+    
 
 socket.on("disconnect", () => {
     console.log("User disconnected", socket.id);
@@ -64,6 +66,6 @@ app.get("/users", async (req, res) => {
         res.status(500).json({ message: "Error fetching users" });
     }
 });
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, ()=>console.log(`Server is running in ${PORT}`)
+const PORT = process.env.PORT || 5001;
+server.listen(PORT, ()=>console.log(`Server is running in ${PORT}`)
 );
